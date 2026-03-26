@@ -1,0 +1,229 @@
+<div style="max-width: 420px; margin: 0 auto; padding: 1rem 0 2rem; font-family: 'DM Sans', -apple-system, sans-serif;">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=JetBrains+Mono:wght@500;600;700&display=swap');
+  
+  .sales-header { padding: 0 20px 16px; }
+  .sales-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; color: #1C2A36; line-height: 1.1; }
+  .sales-sub { font-size: 13px; color: #7A8FA0; margin-top: 4px; }
+
+  .conversion-badge { display: inline-flex; align-items: center; gap: 4px; background: #E1F5EE; color: #0F6E56; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-top: 6px; }
+
+  .input-group { padding: 0 20px; margin-bottom: 6px; }
+  .input-card { background: #FFFFFF; border: 1px solid #E6E0D8; border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; transition: border-color 0.15s; }
+  .input-card:focus-within { border-color: #1A6B5A; }
+  .input-card.accent { background: #FFF8F0; border-color: rgba(232,145,58,.2); }
+  .input-card.accent:focus-within { border-color: #E8913A; }
+
+  .input-label { font-size: 12px; font-weight: 700; color: #7A8FA0; white-space: nowrap; }
+  .input-right { display: flex; align-items: center; gap: 8px; }
+  .input-field { width: 110px; text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 600; color: #1C2A36; background: transparent; border: none; outline: none; padding: 0; }
+  .input-field::placeholder { color: #AAB8C5; }
+  .input-unit { font-size: 11px; font-weight: 700; color: #AAB8C5; min-width: 28px; text-align: right; }
+  .kd-tag { font-size: 10px; font-weight: 700; color: #0F6E56; background: #E1F5EE; padding: 2px 8px; border-radius: 8px; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+
+  .section-label { padding: 0 20px; margin: 16px 0 8px; display: flex; align-items: center; gap: 8px; }
+  .section-dot { width: 6px; height: 6px; border-radius: 50%; background: #1A6B5A; }
+  .section-text { font-size: 11px; font-weight: 800; color: #3A5468; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 20px; margin-bottom: 16px; }
+  .kpi-card { background: #FFFFFF; border: 1px solid #E6E0D8; border-radius: 14px; padding: 14px 12px; position: relative; overflow: hidden; }
+  .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 14px 14px 0 0; }
+  .kpi-card.teal::before { background: #1A6B5A; }
+  .kpi-card.amber::before { background: #E8913A; }
+  .kpi-card.blue::before { background: #378ADD; }
+  .kpi-card.brown::before { background: #854F0B; }
+
+  .kpi-label { font-size: 9px; font-weight: 800; color: #AAB8C5; text-transform: uppercase; letter-spacing: 0.1em; }
+  .kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; line-height: 1.1; margin-top: 4px; }
+  .kpi-value.empty { color: #AAB8C5; }
+  .kpi-desc { font-size: 9px; color: #AAB8C5; margin-top: 3px; }
+  .kpi-formula { font-size: 8px; font-family: 'JetBrains Mono', monospace; color: #AAB8C5; margin-top: 2px; opacity: 0.7; }
+
+  .save-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 40px); margin: 0 20px; height: 50px; background: linear-gradient(135deg, #1A6B5A, #228B73); color: white; border: none; border-radius: 14px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: transform 0.1s; }
+  .save-btn:active { transform: scale(0.98); }
+
+  .pair-row { display: flex; gap: 6px; padding: 0 20px; margin-bottom: 6px; }
+  .pair-row .input-card { flex: 1; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 14px; }
+  .pair-row .input-field { width: 100%; text-align: left; font-size: 16px; }
+  .pair-row .input-right { width: 100%; }
+</style>
+
+<div class="sales-header">
+  <div class="sales-title">Sales entry</div>
+  <div class="sales-sub">Daily KPIs · enter in AED, auto-converts to KD</div>
+  <div class="conversion-badge">
+    <span style="font-size: 13px;">↔</span> 1 KD = 11.9 AED
+  </div>
+</div>
+
+<div class="section-label">
+  <div class="section-dot"></div>
+  <div class="section-text">Revenue</div>
+</div>
+
+<div class="input-group">
+  <div class="input-card">
+    <div>
+      <div class="input-label">Total sales</div>
+      <div class="kd-tag" id="totalKdTag" style="display:none;"></div>
+    </div>
+    <div class="input-right">
+      <input class="input-field" id="totalAED" type="number" inputmode="decimal" placeholder="0" oninput="calc()" />
+      <div class="input-unit">AED</div>
+    </div>
+  </div>
+</div>
+
+<div class="pair-row">
+  <div class="input-card">
+    <div class="input-label">Transactions</div>
+    <div class="input-right">
+      <input class="input-field" id="trn" type="number" inputmode="decimal" placeholder="0" oninput="calc()" />
+      <div class="input-unit">TRN</div>
+    </div>
+  </div>
+  <div class="input-card">
+    <div class="input-label">Footfall (SFA)</div>
+    <div class="input-right">
+      <input class="input-field" id="footfall" type="number" inputmode="decimal" placeholder="0" oninput="calc()" />
+      <div class="input-unit" style="font-size:14px;">👣</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">
+  <div style="width:6px;height:6px;border-radius:50%;background:#E8913A;"></div>
+  <div class="section-text" style="color:#BA7517;">No7 & Products</div>
+</div>
+
+<div class="input-group">
+  <div class="input-card accent">
+    <div>
+      <div class="input-label" style="color:#BA7517;">No7 amount</div>
+      <div class="kd-tag" id="n7KdTag" style="display:none; background:#FFF5E8; color:#854F0B;"></div>
+    </div>
+    <div class="input-right">
+      <input class="input-field" id="no7AED" type="number" inputmode="decimal" placeholder="0" oninput="calc()" />
+      <div class="input-unit">AED</div>
+    </div>
+  </div>
+</div>
+
+<div class="pair-row">
+  <div class="input-card accent">
+    <div class="input-label" style="color:#BA7517;">No7 focus products</div>
+    <div class="input-right">
+      <input class="input-field" id="no7Focus" type="number" inputmode="decimal" placeholder="0" oninput="calc()" />
+      <div class="input-unit">pcs</div>
+    </div>
+  </div>
+  <div class="input-card">
+    <div class="input-label">Total products sold</div>
+    <div class="input-right">
+      <input class="input-field" id="totalProducts" type="number" inputmode="decimal" placeholder="0" oninput="calc()" />
+      <div class="input-unit">items</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">
+  <div style="width:6px;height:6px;border-radius:50%;background:#378ADD;"></div>
+  <div class="section-text">Loyalty</div>
+</div>
+
+<div class="input-group" style="margin-bottom:16px;">
+  <div class="input-card">
+    <div class="input-label">Aura signups</div>
+    <div class="input-right">
+      <input class="input-field" id="aura" type="number" inputmode="decimal" placeholder="0" oninput="calc()" />
+      <div class="input-unit" style="font-size:14px;">🔗</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">
+  <div class="section-dot"></div>
+  <div class="section-text">Calculated KPIs</div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi-card teal">
+    <div class="kpi-label">IPC</div>
+    <div class="kpi-value" id="kpi-ipc" style="color:#1A6B5A;">—</div>
+    <div class="kpi-desc">Items / TRN</div>
+  </div>
+  <div class="kpi-card teal">
+    <div class="kpi-label">ATV</div>
+    <div class="kpi-value" id="kpi-atv" style="color:#0F6E56;">—</div>
+    <div class="kpi-desc">Avg TRN (AED)</div>
+    <div class="kpi-formula">AED÷TRN</div>
+  </div>
+  <div class="kpi-card amber">
+    <div class="kpi-label">Conv %</div>
+    <div class="kpi-value" id="kpi-conv" style="color:#BA7517;">—</div>
+    <div class="kpi-desc">Conversion</div>
+  </div>
+  <div class="kpi-card blue">
+    <div class="kpi-label">No7 %</div>
+    <div class="kpi-value" id="kpi-n7" style="color:#185FA5;">—</div>
+    <div class="kpi-desc">No7 share</div>
+  </div>
+  <div class="kpi-card brown">
+    <div class="kpi-label">Aura %</div>
+    <div class="kpi-value" id="kpi-aura" style="color:#854F0B;">—</div>
+    <div class="kpi-desc">Linkage</div>
+  </div>
+  <div class="kpi-card teal">
+    <div class="kpi-label">Total KD</div>
+    <div class="kpi-value" id="kpi-kd" style="color:#1A6B5A;">—</div>
+    <div class="kpi-desc">From AED</div>
+  </div>
+</div>
+
+<button class="save-btn" onclick="this.textContent='✓ Saved!'; setTimeout(()=>this.textContent='Save sales', 1500);">Save sales</button>
+
+<script>
+const AED2KD = 11.9;
+const n2 = v => { const n = parseFloat(v); return isNaN(n) || v === '' ? null : n; };
+
+function calc() {
+  const tAED = n2(document.getElementById('totalAED').value);
+  const trn = n2(document.getElementById('trn').value);
+  const foot = n2(document.getElementById('footfall').value);
+  const n7AED = n2(document.getElementById('no7AED').value);
+  const tProd = n2(document.getElementById('totalProducts').value);
+  const aura = n2(document.getElementById('aura').value);
+  
+  const tKD = tAED != null ? tAED / AED2KD : null;
+  const n7KD = n7AED != null ? n7AED / AED2KD : null;
+
+  const totalTag = document.getElementById('totalKdTag');
+  if (tKD != null) { totalTag.style.display = 'inline-block'; totalTag.textContent = '= KD ' + tKD.toFixed(2); }
+  else { totalTag.style.display = 'none'; }
+  
+  const n7Tag = document.getElementById('n7KdTag');
+  if (n7KD != null) { n7Tag.style.display = 'inline-block'; n7Tag.textContent = '= KD ' + n7KD.toFixed(2); }
+  else { n7Tag.style.display = 'none'; }
+
+  const ipc = tProd != null && trn ? (tProd / trn).toFixed(2) : null;
+  const atv = tAED != null && trn ? (tAED / trn).toFixed(2) : null;
+  const conv = trn != null && foot ? ((trn / foot) * 100).toFixed(1) : null;
+  const n7pct = n7AED != null && tAED ? ((n7AED / tAED) * 100).toFixed(1) : null;
+  const auraPct = aura != null && trn ? ((aura / trn) * 100).toFixed(1) : null;
+
+  setKpi('kpi-ipc', ipc, '#1A6B5A');
+  setKpi('kpi-atv', atv, '#0F6E56');
+  setKpi('kpi-conv', conv != null ? conv + '%' : null, '#BA7517');
+  setKpi('kpi-n7', n7pct != null ? n7pct + '%' : null, '#185FA5');
+  setKpi('kpi-aura', auraPct != null ? auraPct + '%' : null, '#854F0B');
+  setKpi('kpi-kd', tKD != null ? tKD.toFixed(2) : null, '#1A6B5A');
+}
+
+function setKpi(id, val, color) {
+  const el = document.getElementById(id);
+  if (val != null) { el.textContent = val; el.style.color = color; el.classList.remove('empty'); }
+  else { el.textContent = '—'; el.style.color = ''; el.classList.add('empty'); }
+}
+</script>
+</div>
